@@ -10,9 +10,9 @@ services:
       - MYSQL_ROOT_USER=$DB_ADMIN_USERNAME
       - MYSQL_ROOT_PASSWORD=$DB_ADMIN_PASSWORD
     volumes:
-      - "${ROOT}/mysql/data:/var/lib/mysql"
+      - "${DATA_ROOT}/mysql/data:/var/lib/mysql"
     logging:
-      driver: journald
+      driver: json-file
 
   server:
     image: era-server:latest
@@ -28,11 +28,11 @@ services:
     ports:
       - 2222:2222
     volumes:
-      - "${ROOT}/etc:/etc/opt/eset/"
-      - "${ROOT}/var:/var/opt/eset/"
-      - "${ROOT}/log:/var/log/eset/"
+      - "${DATA_ROOT}/etc:/etc/opt/eset/"
+      - "${DATA_ROOT}/var:/var/opt/eset/"
+      - "${DATA_ROOT}/log:/var/log/eset/"
     logging:
-      driver: journald
+      driver: json-file
 
   console:
     image: era-console:latest
@@ -48,4 +48,4 @@ services:
     ports:
      - 8080:8080
     logging:
-      driver: journald
+      driver: json-file
