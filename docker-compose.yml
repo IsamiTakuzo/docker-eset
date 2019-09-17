@@ -27,6 +27,8 @@ services:
       - db
     ports:
       - 2222:2222
+    expose:
+      - 2223
     volumes:
       - "${DATA_ROOT}/etc:/etc/opt/eset/"
       - "${DATA_ROOT}/var:/var/opt/eset/"
@@ -45,7 +47,28 @@ services:
       - ERA_SRV_HOSTNAME=server
     depends_on:
       - server
-    ports:
-     - 8080:8080
+#    ports:
+#     - 8080:8080
+    expose:
+      - 8009
     logging:
       driver: json-file
+
+  ajp:
+    build: ajp/
+    container_name: ajp
+    restart: always
+
+    environment:
+      - TZ=Asia/Tokyo
+
+    depends_on:
+      - console
+ 
+#    expose:
+#      - 80
+#      - 443
+
+    ports:
+      - 80:80
+      - 443:443
