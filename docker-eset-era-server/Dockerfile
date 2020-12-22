@@ -18,7 +18,9 @@ RUN apt-get update && \
     wget \
     winbind \
     netcat \
-    xvfb
+    xvfb \
+    snmp \
+    selinux-policy-dev
 
 # Get ODBC Connector
 RUN mkdir -p /opt/odbc/
@@ -29,7 +31,8 @@ RUN cp -v /opt/odbc/lib/* /usr/local/lib/
 RUN /usr/local/bin/myodbc-installer -a -d -n "MySQL ODBC Driver" -t "Driver=/usr/local/lib/libmyodbc5w.so"
 
 # Get ESET Remote Administrator Server
-ADD https://download.eset.com/com/eset/apps/business/era/server/linux/latest/server-linux-x86_64.sh /opt/server-linux-x86_64.sh
+#ADD https://download.eset.com/com/eset/apps/business/era/server/linux/latest/server-linux-x86_64.sh /opt/server-linux-x86_64.sh
+ADD ./Server-Linux-x86_64.sh /opt/server-linux-x86_64.sh
 RUN chmod +x /opt/server-linux-x86_64.sh
 
 #RUN /opt/server-linux-x86_64.sh -v | grep "version" | sed 's/^.*version: \([0-9\.]\+\).*$/\1/'
