@@ -22,7 +22,7 @@ RUN apt-get update && \
     snmp \
     selinux-policy-dev
 
-# Get ODBC Connector
+# Get ODBC Connector 
 RUN mkdir -p /opt/odbc/
 ADD https://dev.mysql.com/get/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.10-linux-debian9-x86-64bit.tar.gz /opt/odbc/mysql-connector-odbc.tar.gz
 RUN tar --strip-components=1 -x -f /opt/odbc/mysql-connector-odbc.tar.gz -C /opt/odbc/
