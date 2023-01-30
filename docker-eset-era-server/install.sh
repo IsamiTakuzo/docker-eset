@@ -1,7 +1,8 @@
 #!/bin/bash
 
 /opt/server-linux-x86_64.sh \
-    --db-driver "MySQL ODBC Driver" \
+    --db-type="MySQL Server" \
+    --db-driver "MySQL ODBC 8.0 Driver" \
     --db-hostname "${DB_HOSTNAME}" \
     --db-name "${DB_NAME}" \
     --db-admin-username "${DB_ADMIN_USERNAME}" \

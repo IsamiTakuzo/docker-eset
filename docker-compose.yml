@@ -1,26 +1,34 @@
 # Use root/example as user/password credentials
-version: '3.1'
+version: '3.8'
 services:
   db:
     image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password --innodb-log-file-size=100M --innodb-log-files-in-group=2 --max-allowed-packet=30M --bind-address=*
+    container_name: eset-mysql
+    command: --default-authentication-plugin=mysql_native_password --innodb-log-file-size=100M --innodb-log-files-in-group=2 --max-allowed-packet=33M --character-set-server=utf8mb4 --bind-address=* 
     restart: always
     env_file: .env
     environment:
       - MYSQL_ROOT_USER=$DB_ADMIN_USERNAME
       - MYSQL_ROOT_PASSWORD=$DB_ADMIN_PASSWORD
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER_USERNAME
+      - MYSQL_PASSWORD=$DB_USER_PASSWORD
     volumes:
-      - "${ROOT}/mysql/data:/var/lib/mysql"
+      - eset-db:/var/lib/mysql
     logging:
       driver: journald
 
   server:
     image: era-server:latest
+    container_name: eset-server
     build:
       context: docker-eset-era-server/
     image: era-server:latest
     restart: always
+    init: true
     env_file: .env
+    cap_add:
+      - SYS_ADMIN
     environment:
       - DB_HOSTNAME=db
     depends_on:
@@ -28,14 +36,16 @@ services:
     ports:
       - 2222:2222
     volumes:
-      - "${ROOT}/etc:/etc/opt/eset/"
-      - "${ROOT}/var:/var/opt/eset/"
-      - "${ROOT}/log:/var/log/eset/"
+      - server-etc:/etc/opt/eset
+      - server-var:/var/opt/eset
+      - server-log:/var/log/eset
+      - server-cgroup:/sys/fs/cgroup:ro
     logging:
       driver: journald
 
   console:
     image: era-console:latest
+    container_name: eset-console
     build:
       context: docker-eset-era-console/
     image: era-console:latest
@@ -49,3 +59,38 @@ services:
      - 8080:8080
     logging:
       driver: journald
+
+# Volumeセクションの.envはデフォルトで読まれている
+
+volumes:
+
+  eset-db:
+    driver_opts:
+      type: none
+      device: "${ROOT}/data"
+      o: bind
+
+  server-etc:
+    driver_opts:
+      type: none
+      device: "${ROOT}/etc"
+      o: bind
+
+  server-var:
+    driver_opts:
+      type: none
+      device: "${ROOT}/var"
+      o: bind
+
+  server-log:
+    driver_opts:
+      type: none
+      device: "${ROOT}/log"
+      o: bind
+
+  server-cgroup:
+    driver_opts:
+      type: none
+      device: /sys/fs/cgroup
+      o: bind
+

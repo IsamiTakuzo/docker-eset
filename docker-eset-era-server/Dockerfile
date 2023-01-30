@@ -1,4 +1,4 @@
-FROM debian:9
+FROM debian:10
 
 # Set frontend
 ENV DEBIAN_FRONTEND noninteractive
@@ -20,18 +20,20 @@ RUN apt-get update && \
     netcat \
     xvfb \
     snmp \
-    selinux-policy-dev
+    selinux-policy-dev  \
+    xauth \
+    init
 
 # Get ODBC Connector
 RUN mkdir -p /opt/odbc/
-ADD https://dev.mysql.com/get/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.10-linux-debian9-x86-64bit.tar.gz /opt/odbc/mysql-connector-odbc.tar.gz
+ADD  https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-8.0.17-linux-debian10-x86-64bit.tar.gz /opt/odbc/mysql-connector-odbc.tar.gz
 RUN tar --strip-components=1 -x -f /opt/odbc/mysql-connector-odbc.tar.gz -C /opt/odbc/
 RUN cp -v /opt/odbc/bin/myodbc-installer /usr/local/bin/
 RUN cp -v /opt/odbc/lib/* /usr/local/lib/
-RUN /usr/local/bin/myodbc-installer -a -d -n "MySQL ODBC Driver" -t "Driver=/usr/local/lib/libmyodbc5w.so"
+RUN /usr/local/bin/myodbc-installer -a -d -n "MySQL ODBC 8.0 Driver" -t "Driver=/usr/local/lib/libmyodbc8w.so"
+
 
 # Get ESET Remote Administrator Server
-#ADD https://download.eset.com/com/eset/apps/business/era/server/linux/latest/server-linux-x86_64.sh /opt/server-linux-x86_64.sh
 ADD ./Server-Linux-x86_64.sh /opt/server-linux-x86_64.sh
 RUN chmod +x /opt/server-linux-x86_64.sh
 
@@ -54,4 +56,5 @@ WORKDIR /opt/eset/
 ADD run.sh /usr/local/bin/run.sh
 ADD install.sh /usr/local/bin/install.sh
 RUN chmod +x /usr/local/bin/run.sh /usr/local/bin/install.sh
-CMD ["/bin/sh","/usr/local/bin/run.sh"]
+CMD ["/usr/local/bin/run.sh"]
+
