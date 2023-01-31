@@ -22,7 +22,8 @@ RUN apt-get update && \
     snmp \
     selinux-policy-dev  \
     xauth \
-    init
+    init  \
+    lshw
 
 # Get ODBC Connector
 RUN mkdir -p /opt/odbc/

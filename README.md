@@ -5,7 +5,7 @@ In English ,  see below.
 
 このプロダクトはbkacksmith/docker-esetからフォークしたものです。
 
-オリジナルがESMC7.2をターゲットしていたのを、ESET PROTECT9.0/9.1に修正したものです。
+オリジナルがESMC7.2をターゲットしていたのを、ESET PROTECT9.0/9.1/10.0に修正したものです。
 オリジナルにあった、該当バージョンのDBが存在する状態でUPするとサーバコンテナが再起動を繰り返す問題を修正しています。
 
 ## クイックスタート
@@ -14,7 +14,11 @@ In English ,  see below.
 
   1. dockerとdocker-compose(composeプラグイン）をホストに導入
   2. インストールするバージョンのServer-Linux-x86_64.shとera.warをESETもしくは代理店から入手
-     日本国内だとCanon ITSが代理店です
+...
+     日本国内だとCanon ITSが代理店です。 Component_Linux_x64.zipをダウンロード、展開してください
+
+     Component_Linux_x64.zipには、Server-Linux-x86_64.shとera.warが含まれます。
+...
   3. Server-Linux-x86_64.shを./docker-eset-era-server/にコピー
   4. era.shを./docker-eset-era-console/にコピー
   5. .env.sampleを.envにコピー
@@ -45,7 +49,7 @@ systemctl start eset.service
 ## In English
 
 This product is forked from blacksmith/docker-eset
-Next version of Eset Security Management Center.
+This fork is used for ESET PROTECT 9.0/9.1/10.0
 
 This fork was fixed that server container always reboot when DB table exists.
 
